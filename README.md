@@ -3,4 +3,4 @@ public repository for the browser extension
 
 gif of the extension in work:
 
-![](https://cdn.discordapp.com/attachments/780127130003701790/801036732153200710/torpedo_gif.gif)
+![](https://cdn.discordapp.com/attachments/907316132279636048/930237141433335838/limbic_gif1.gif)
