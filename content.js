@@ -62,9 +62,9 @@ function set_value(name) {
 function click_on_radio_button(val) {
     var table = document.querySelector(".search-list").childNodes;
     for (let i = 1; i < table.length; i++) {
-        if (table[i].childNodes[1].innerText.startsWith(val)) {
-            table[i].childNodes[1].childNodes[3].click();
-            console.log(table[i].childNodes[1].childNodes[3].childNodes[2].className);
+        if (table[i].childNodes[1].childNodes[3].innerText.startsWith(val)) {
+            table[i].childNodes[1].childNodes[2].click();
+            console.log(table[i].childNodes[1].childNodes[2].childNodes[2].className);
         }
     };
 
@@ -123,11 +123,19 @@ function check_if_on_sparkscan() {
         if (!sessionStorage.getItem('limit_var')) {
             return;
         } else {
-            document.querySelector("#mat-expansion-panel-header-0").click();
-            var time_table = document.querySelector(".duration-infoboosts > ul:nth-child(1)").childNodes;
-            time_table[time_variable].childNodes[1].childNodes[0].click();
-            document.querySelector("#mat-expansion-panel-header-0").click();
-            setTimeout(start_ticking, 2000);
+            handleResourcesReady(function() {
+                if(!document.querySelector("#mat-expansion-panel-header-3 > span > span")){
+                    setTimeout(check_if_on_sparkscan(),100);
+                    return;
+                }
+                console.log("ready");
+                document.querySelector("#mat-expansion-panel-header-0").click();
+                var time_table = document.querySelector(".duration-infoboosts > ul:nth-child(1)").childNodes;
+                time_table[time_variable].childNodes[0].childNodes[0].click();
+                document.querySelector("#mat-expansion-panel-header-0 > span").click();
+
+                setTimeout(start_ticking, 100);
+            });
         }
     }
     else {
@@ -146,21 +154,21 @@ function check_if_on_library_creation() {
 function loop_through_the_nodes(table) {
     console.log("in the loop");
     for (let i = 1; i < table.length; i++) {
-        if ((parseInt(table[i].childNodes[0].childNodes[1].textContent) >= limit_variable) &&
-            table[i].childNodes[1].firstElementChild.currentSrc.endsWith("/blue-minus.png")) {
-            table[i].childNodes[1].click();
+        if ((parseInt(table[i].childNodes[1].childNodes[1].textContent) >= limit_variable) &&
+            table[i].childNodes[0].childNodes[1].src.endsWith("/blue-minus.png")) {
+            table[i].childNodes[0].childNodes[1].click();
         }
     };
 
 }
 
 function start_ticking() {
-    document.querySelector("#mat-expansion-panel-header-3").click();
+    document.querySelector("#mat-expansion-panel-header-3 > span > span").click();
     setTimeout(function () {
         document.querySelector("#ngb-nav-1").click();
-    }, 1000);
-    var table = document.querySelector("ul.ingredients-row:nth-child(2) > div:nth-child(1)").childNodes;
-    setTimeout(function () { loop_through_the_nodes(table); }, 1500);
+    }, 200);
+    var table = document.querySelector("#ngb-nav-1-panel > div > div.p-relative > ul > div").childNodes;
+    setTimeout(function () { loop_through_the_nodes(table); }, 600);
 }
 
 function init() {
@@ -168,6 +176,31 @@ function init() {
         console.log("on the site");
         get_data();
         check_if_on_sparkscan();
+    }
+}
+
+
+function handleResourcesReady(callback) {
+    if (document.readyState === 'complete') {
+        setTimeout(callback);
+    } else {
+          if (callback.$$__PROXY__$$) {
+            return;
+        }
+        var proxy = callback.$$__PROXY__$$ = function(e) {
+            if (document.readyState === 'complete') {
+                cancelResourcesReady(callback);
+                callback();
+            }
+        };
+        document.addEventListener('readystatechange', proxy);
+    }
+}
+
+function cancelResourcesReady(callback) {
+    var proxy = callback.$$__PROXY__$$;
+    if (proxy && delete callback.$$__PROXY__$$) {
+        document.removeEventListener('readystatechange', proxy);
     }
 }
 
