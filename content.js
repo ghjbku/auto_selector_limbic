@@ -131,7 +131,11 @@ function check_if_on_sparkscan() {
                 console.log("ready");
                 document.querySelector("#mat-expansion-panel-header-0").click();
                 var time_table = document.querySelector(".duration-infoboosts > ul:nth-child(1)").childNodes;
-                time_table[time_variable].childNodes[0].childNodes[0].click();
+                if(!time_table){
+                    setTimeout(check_if_on_sparkscan(),100);
+                    return;
+                }
+                time_table[time_variable-1].childNodes[0].childNodes[0].click();
                 document.querySelector("#mat-expansion-panel-header-0 > span").click();
 
                 setTimeout(start_ticking, 100);
@@ -153,10 +157,10 @@ function check_if_on_library_creation() {
 
 function loop_through_the_nodes(table) {
     console.log("in the loop");
-    for (let i = 1; i < table.length; i++) {
-        if ((parseInt(table[i].childNodes[1].childNodes[1].textContent) >= limit_variable) &&
-            table[i].childNodes[0].childNodes[1].src.endsWith("/blue-minus.png")) {
-            table[i].childNodes[0].childNodes[1].click();
+    for (let i = 0; i < table.length-1; i++) {
+        if ((parseInt(table[i].childNodes[1].childNodes[0].textContent) >= limit_variable) &&
+            table[i].childNodes[0].childNodes[0].src.endsWith("/blue-minus.png")) {
+            table[i].childNodes[0].childNodes[0].click();
         }
     };
 
